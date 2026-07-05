@@ -90,20 +90,3 @@ http://localhost:8080/index.html
 | GET | `/hotels/?order_by=price` | Sort results |
 
 ---
-
-## 📸 Pages
-
-| Page | Description |
-|------|-------------|
-| **Hotels** | Browse all hotels with filters and sorting |
-| **Hotel Detail** | View photos, description, rating, and book |
-| **Wishlist** | Saved hotels (persisted in localStorage) |
-| **My Bookings** | Confirmed bookings with cancel option |
-
----
-
-## 👨‍💻 Author
-
-**Kesha** — Frontend Development Intern  
-Batch: FSD Project 2  
-GitHub: [@krish2413179-prog](https://github.com/krish2413179-prog)
