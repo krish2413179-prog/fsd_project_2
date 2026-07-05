@@ -1,7 +1,4 @@
-﻿/* ===========================
-   LUXORA HOTELS — app.js
-   =========================== */
-const API_BASE = 'https://demohotelsapi.pythonanywhere.com/hotels/';
+﻿const API_BASE = 'https://demohotelsapi.pythonanywhere.com/hotels/';
 const PAGE_SIZE = 12;
 
 const state = {
@@ -63,7 +60,6 @@ const el = {
     heroSection: document.getElementById('hero-section'),
 };
 
-/* ── Init ── */
 document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     updateBadges();
@@ -72,7 +68,6 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchHotels();
 });
 
-/* ── Event Listeners ── */
 function setupEventListeners() {
     el.navLogo.addEventListener('click', e => { e.preventDefault(); navigate('listing'); });
     el.btnGotoListing.addEventListener('click', () => navigate('listing'));
@@ -133,7 +128,6 @@ function setupEventListeners() {
     });
 }
 
-/* ── Hero Slider ── */
 function startHeroSlider() {
     const slides = el.heroBgSlider.querySelectorAll('.hero-slide');
     const dots = el.heroDots.querySelectorAll('.hero-dot');
@@ -151,7 +145,6 @@ function goToSlide(index) {
     dots[index].classList.add('active');
 }
 
-/* ── Navigation ── */
 function navigate(view) {
     state.currentView = view;
     [el.listingPage, el.detailsPage, el.wishlistPage, el.bookingsPage].forEach(p => p.classList.remove('active'));
@@ -178,7 +171,6 @@ function navigate(view) {
     lucide.createIcons();
 }
 
-/* ── Fetch Hotels ── */
 async function fetchHotels(params = {}) {
     if (state.isLoading) return;
     state.isLoading = true;
@@ -186,7 +178,7 @@ async function fetchHotels(params = {}) {
 
     const url = new URL(API_BASE);
     Object.entries(params).forEach(([k, v]) => { if (v !== '' && v !== null && v !== undefined) url.searchParams.set(k, v); });
-    // Always fetch all for local pagination
+    
     url.searchParams.delete('limit');
     url.searchParams.delete('skip');
 
@@ -281,7 +273,6 @@ function hotelCardHTML(h) {
     </div>`;
 }
 
-/* ── Stars ── */
 function starsHTML(rating) {
     let html = '';
     const r = Math.round(parseFloat(rating));
@@ -291,7 +282,6 @@ function starsHTML(rating) {
     return html;
 }
 
-/* ── Filters ── */
 function applyFilters() {
     const params = {};
     const search = (state.filters.search || el.searchInput.value.trim());
@@ -323,7 +313,6 @@ function resetFilters() {
     fetchHotels({});
 }
 
-/* ── View Mode ── */
 function setViewMode(mode) {
     state.viewMode = mode;
     el.hotelsGrid.classList.toggle('list-view', mode === 'list');
@@ -331,7 +320,6 @@ function setViewMode(mode) {
     el.btnListView.classList.toggle('active', mode === 'list');
 }
 
-/* ── Hotel Details ── */
 window.viewHotelDetails = async function(id) {
     el.hotelDetailsContent.innerHTML = `<div style="padding:4rem;text-align:center;"><div class="shimmer-card" style="height:400px;border-radius:16px;"></div></div>`;
     navigate('details');
@@ -460,7 +448,6 @@ window.confirmBookingFromDetail = function(id) {
     setTimeout(() => navigate('bookings'), 800);
 };
 
-/* ── Booking Modal (from card) ── */
 window.openBookingModal = function(id) {
     const hotel = state.hotels.find(h => h.id === id);
     if (!hotel) return;
@@ -527,7 +514,6 @@ function closeBookingModal() {
     el.bookingModalOverlay.style.display = 'none';
 }
 
-/* ── Wishlist ── */
 window.toggleWishlist = function(id) {
     const idx = state.wishlist.findIndex(w => w.id === id);
     if (idx > -1) {
@@ -539,7 +525,7 @@ window.toggleWishlist = function(id) {
     }
     saveWishlist();
     updateBadges();
-    // Update button in grid
+    
     const btn = document.querySelector(`.hotel-card[data-id="${id}"] .hotel-wishlist-btn`);
     if (btn) btn.classList.toggle('in-wishlist', state.wishlist.some(w => w.id === id));
 };
@@ -555,7 +541,6 @@ function renderWishlist() {
 
 function saveWishlist() { localStorage.setItem('luxora_wishlist', JSON.stringify(state.wishlist)); }
 
-/* ── Bookings ── */
 function renderBookings() {
     if (state.bookings.length === 0) {
         el.bookingsList.innerHTML = `<div class="bookings-empty"><i data-lucide="calendar-x"></i><h3>No bookings yet</h3><p>Find your perfect hotel and make your first booking!</p><button class="btn-browse" onclick="navigate('listing')">Browse Hotels</button></div>`;
@@ -599,7 +584,6 @@ function formatDate(dateStr) {
     return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 }
 
-/* ── Badges ── */
 function updateBadges() {
     const wl = state.wishlist.length;
     const bk = state.bookings.length;
@@ -609,7 +593,6 @@ function updateBadges() {
     el.bookingsBadge.classList.toggle('show', bk > 0);
 }
 
-/* ── Toast ── */
 function showToast(msg, type = 'success') {
     const icons = { success: 'check-circle', warning: 'alert-circle', error: 'x-circle' };
     const toast = document.createElement('div');
